@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0px;
+                padding: 0px;
+                background-color: #CCCCCC;
+                overflow:hidden;
+            }
+
+            table {
+                width:100%;
+            }
+
+            .handle-cell {
+                width:32px;
+            }
+
+            .showitem-cell {
+                width:32px;
+            }
+
+            .title-cell {
+            }
+
+            table tr td {
+                margin: 0px;
+                padding: 0px;
+                border-collapse: collapse;
+            }
+
+            ul {
+                margin: 0px;
+                padding: 0px;
+            }
+
+            ul li {
+                list-style: none;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            .handle {
+                width:32px;
+                height:32px;
+            }
+
+            .showitem {
+                width:32px;
+                height:32px;
+            }
+
+            .title {
+
+            }
+        </style>
+
+        <!-- link rel="stylesheet" type="text/css" href="jquery-ui.min.css">
+        <script type="text/javascript" src="jquery-3.0.0.min.js"></script>
+        <script type="text/javascript" src="jquery-ui.min.js"></script -->
+
+        <script type="text/javascript">
+
+        var debugMode = true;
+
+        function setDebugMode(mode) {
+           debugMode = mode;
+        }
+
+        function loadLibrary(lib, after) {
+            var js = document.createElement("script");
+            js.type = "text/javascript";
+            js.src = lib;
+            /*js.setAttribute("async","");
+            js.setAttribute("defer","");*/
+            js.onload = after;
+            document.body.appendChild(js);
+        }
+
+        function loadStyle(style) {
+            var node = document.createElement('style');
+            node.innerHTML = style;
+            document.body.appendChild(node);
+        }
+
+        function initApp()
+        {
+            window.onerror = function (err, file, line) {
+                    var log = (err + '\nIn file: ' + file + '\nOn line: ' + line);
+                    alert("Javascript error:" + log);
+                };
+
+            if (debugMode) {
+                loadStyle('jquery-ui-1.11.4.min.css');
+                loadLibrary('jquery-3.0.0.min.js');
+                loadLibrary('jquery-ui-1.11.4.min.js', function () {
+                    addToList(1, "test1");
+                    addToList(2, "test2");
+                    makeSortable();
+                });
+            }
+        }
+
+        function addToList(id, title, image)
+        {
+            var list =
+                    "<li id='item-" + id + "' class='task ui-state-default' >" +
+                    "<table><tr>" + 
+                    "<td class='handle-cell'><div class='handle'><img width='16' height='16' src='data:image/png;base64," + image + "'></div></td>" +
+                    "<td class='showitem-cell'><div class='showitem' >" +
+                    "<input type='checkbox' checked onclick=\"window.external.toggleItem('" + id + "');\">" +
+                    "</div></td>" +
+                    "<td class='title-cell' onclick=\"window.external.activateItem('" + id + "');\" ><div class='title' >" +
+                    title +
+                    "</div></td>" +
+                    "</tr></table>" +
+                    "</li>";
+
+            $('#itemList').append(
+                $(list)
+                .click(function () {
+                    // handle click
+                })
+            );
+
+        }
+
+        function removeFromList(id) {
+            $('#item-' + id).remove();
+
+        }
+
+        function makeSortable()
+        {
+            $("#itemList").sortable({ handle: '.handle' });
+            $("#itemList").disableSelection();
+        }
+        </script>
+
+        <script type='text/javascript'>
+            function doIt() {
+                //alert($('body').html());
+                return 'done';
+            }
+        </script>
+    </head>
+    <body onload='initApp()'>
+        <ul id="itemList"></ul>
+    </body>
+</html>
