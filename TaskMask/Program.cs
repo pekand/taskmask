@@ -37,9 +37,10 @@ namespace TaskMask
             RegistryKey Regkey = null;
             try
             {
-
-
-                Regkey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
+                Regkey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", 
+                    true
+                );
 
                 if (Regkey == null)
                 {

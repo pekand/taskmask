@@ -134,8 +134,8 @@ namespace TaskMask
             {
                 if (!Manager.isLive(items[i].handle))
                 {
-
-                    Object[] objArray = new Object[3];
+                    // remove item if not long exist
+                    Object[] objArray = new Object[1];
                     objArray[0] = (Object)items[i].id;
                     wb.Document.InvokeScript("removeFromList", objArray);
                     items.RemoveAt(i);
@@ -144,12 +144,23 @@ namespace TaskMask
 
             foreach (KeyValuePair<IntPtr, string> window in windows)
             {
-                
+
                 // check if is item new
                 bool exists = false;
                 foreach (Item itemIn in items)
                 {
                     if (window.Key == itemIn.handle) {
+
+                        if (itemIn.title != window.Value)
+                        {
+                            //update title
+                            itemIn.title = window.Value;
+                            Object[] objArray = new Object[2];
+                            objArray[0] = (Object)itemIn.id;
+                            objArray[1] = (Object)window.Value;
+                            wb.Document.InvokeScript("updateTitle", objArray);
+                        }
+
                         exists = true;
                         break;
                     }

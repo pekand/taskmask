@@ -39,6 +39,11 @@
                 list-style: none;
                 margin: 0px;
                 padding: 0px;
+                
+            }
+
+            ul li:hover {
+                background-color:#F6F6F6;
             }
 
             .handle {
@@ -51,14 +56,10 @@
                 height:32px;
             }
 
-            .title {
-
+            .title-cell {
+                cursor:pointer;
             }
         </style>
-
-        <!-- link rel="stylesheet" type="text/css" href="jquery-ui.min.css">
-        <script type="text/javascript" src="jquery-3.0.0.min.js"></script>
-        <script type="text/javascript" src="jquery-ui.min.js"></script -->
 
         <script type="text/javascript">
 
@@ -72,8 +73,6 @@
             var js = document.createElement("script");
             js.type = "text/javascript";
             js.src = lib;
-            /*js.setAttribute("async","");
-            js.setAttribute("defer","");*/
             js.onload = after;
             document.body.appendChild(js);
         }
@@ -119,9 +118,6 @@
 
             $('#itemList').append(
                 $(list)
-                .click(function () {
-                    // handle click
-                })
             );
 
         }
@@ -129,6 +125,10 @@
         function removeFromList(id) {
             $('#item-' + id).remove();
 
+        }
+
+        function updateTitle(id, title) {
+            $('#item-' + id + ' .title').text(title);
         }
 
         function makeSortable()
