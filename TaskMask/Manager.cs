@@ -8,10 +8,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace TaskMask
 {
-    class Manager
+    public static class Manager
     {
         //*******// List windows
 
@@ -254,6 +255,23 @@ namespace TaskMask
         public static bool isMinimalized(IntPtr hWnd)
         {
             return IsIconic(hWnd);
+        }
+
+        //*******// Serialization
+
+        public static T Deserialize<T>(this string toDeserialize)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            StringReader textReader = new StringReader(toDeserialize);
+            return (T)xmlSerializer.Deserialize(textReader);
+        }
+
+        public static string Serialize<T>(this T toSerialize)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            StringWriter textWriter = new StringWriter();
+            xmlSerializer.Serialize(textWriter, toSerialize);
+            return textWriter.ToString();
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Permissions;
 using System.Drawing.Imaging;
+using System.Xml.Serialization;
 
 namespace TaskMask
 {
@@ -77,23 +78,10 @@ namespace TaskMask
             wb.IsWebBrowserContextMenuEnabled = false;
             wb.WebBrowserShortcutsEnabled = false;
             wb.ObjectForScripting = this;
-            //wb.ScriptErrorsSuppressed = true;
+            wb.ScriptErrorsSuppressed = true;
 
             string html = Properties.Resources.main_html;
             wb.DocumentText = html;
-        }
-
-        // clean hiden items after close
-        private void TaskMaskForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            foreach (Item item in items)
-            {
-                if (!item.visibility)
-                {
-                    Manager.showApp(item.handle);
-                    item.visibility = true;
-                }
-            }
         }
 
         // load jquery to webbrowser
@@ -192,6 +180,72 @@ namespace TaskMask
         private void timer1_Tick(object sender, EventArgs e)
         {
             updateList();
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void topMostToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.TopMost = !this.TopMost;
+            this.topMostToolStripMenuItem.Checked = this.TopMost;
+        }
+
+        private void TaskMaskForm_Load(object sender, EventArgs e)
+        {
+            this.Left = Properties.Settings.Default.PosLeft;
+            this.Top = Properties.Settings.Default.PosTop;
+            this.Height = Properties.Settings.Default.Height;
+            this.Width = Properties.Settings.Default.Width;
+            this.TopMost = Properties.Settings.Default.TopMost;
+
+            if (!this.IsOnScreen(this))
+            {
+                this.Left = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
+                this.Top = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
+                this.WindowState = FormWindowState.Normal;
+            }
+
+        }
+
+        // clean hiden items after close
+        private void TaskMaskForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (Item item in items)
+            {
+                if (!item.visibility)
+                {
+                    Manager.showApp(item.handle);
+                    item.visibility = true;
+                }
+            }
+
+            Properties.Settings.Default.PosLeft = this.Left;
+            Properties.Settings.Default.PosTop = this.Top;
+            Properties.Settings.Default.Height = this.Height;
+            Properties.Settings.Default.Width = this.Width;
+            Properties.Settings.Default.TopMost = this.TopMost;
+
+            Properties.Settings.Default.Save();
+        }
+
+        // check if form is on screen
+        public bool IsOnScreen(Form form)
+        {
+            Screen[] screens = Screen.AllScreens;
+            foreach (Screen screen in screens)
+            {
+                Point formTopLeft = new Point(form.Left, form.Top);
+
+                if (screen.WorkingArea.Contains(formTopLeft))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

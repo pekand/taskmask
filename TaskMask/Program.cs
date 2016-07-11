@@ -60,6 +60,9 @@ namespace TaskMask
                 FindAppkey = Convert.ToString(Regkey.GetValue(appName));
 
             }
+            catch(Exception e)
+            {
+            }
             finally
             {
                 if (Regkey != null)

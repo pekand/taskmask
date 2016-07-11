@@ -9,55 +9,61 @@
                 overflow:hidden;
             }
 
-            table {
+            .itemlist table {
                 width:100%;
             }
 
-            .handle-cell {
+            .itemlist .handle-cell {
                 width:32px;
             }
 
-            .showitem-cell {
+            .itemlist .showitem-cell {
                 width:32px;
             }
 
-            .title-cell {
+            .itemlist .title-cell {
             }
 
-            table tr td {
+            .itemlist table tr td {
                 margin: 0px;
                 padding: 0px;
                 border-collapse: collapse;
             }
 
-            ul {
+            .itemlist {
                 margin: 0px;
-                padding: 0px;
+                padding: 0px 0px 20px 0px;
+                min-height: 20px;
+                border-bottom: 1px solid gray;
+                margin: 10px;
             }
 
-            ul li {
+            .itemlist li {
                 list-style: none;
                 margin: 0px;
                 padding: 0px;
-                
+
             }
 
-            ul li:hover {
+            .itemlist li:hover {
                 background-color:#F6F6F6;
             }
 
-            .handle {
+            .itemlist .handle {
                 width:32px;
                 height:32px;
             }
 
-            .showitem {
+            .itemlist .showitem {
                 width:32px;
                 height:32px;
             }
 
-            .title-cell {
+            .itemlist .title-cell {
                 cursor:pointer;
+            }
+
+            .itemlist:empty {
             }
         </style>
 
@@ -86,9 +92,9 @@
         function initApp()
         {
             window.onerror = function (err, file, line) {
-                    var log = (err + '\nIn file: ' + file + '\nOn line: ' + line);
-                    alert("Javascript error:" + log);
-                };
+                var log = (err + '\nIn file: ' + file + '\nOn line: ' + line);
+                document.write("Javascript error:" + log);
+            };
 
             if (debugMode) {
                 loadStyle('jquery-ui-1.11.4.min.css');
@@ -101,11 +107,14 @@
             }
         }
 
-        function addToList(id, title, image)
+        function addToList(id, title, image, block)
         {
+            if (typeof(image)==='undefined') image = "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";
+            if (typeof (block) === 'undefined') block = 1;
+
             var list =
                     "<li id='item-" + id + "' class='task ui-state-default' >" +
-                    "<table><tr>" + 
+                    "<table><tr>" +
                     "<td class='handle-cell'><div class='handle'><img width='16' height='16' src='data:image/png;base64," + image + "'></div></td>" +
                     "<td class='showitem-cell'><div class='showitem' >" +
                     "<input type='checkbox' checked onclick=\"window.external.toggleItem('" + id + "');\">" +
@@ -116,7 +125,7 @@
                     "</tr></table>" +
                     "</li>";
 
-            $('#itemList').append(
+            $('#itemList' + block).append(
                 $(list)
             );
 
@@ -133,8 +142,13 @@
 
         function makeSortable()
         {
-            $("#itemList").sortable({ handle: '.handle' });
-            $("#itemList").disableSelection();
+            $("#itemList1, #itemList2, #itemList3, #itemList4").sortable({
+                handle: '.handle',
+                connectWith: ".connectedSortable",
+                update: function () {
+                    
+                }
+            }).disableSelection();
         }
         </script>
 
@@ -146,6 +160,9 @@
         </script>
     </head>
     <body onload='initApp()'>
-        <ul id="itemList"></ul>
+        <ul id="itemList1" class="itemlist connectedSortable"></ul>
+        <ul id="itemList2" class="itemlist connectedSortable"></ul>
+        <ul id="itemList3" class="itemlist connectedSortable"></ul>
+        <ul id="itemList4" class="itemlist connectedSortable"></ul>
     </body>
 </html>
