@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Security.Permissions;
 using System.Drawing.Imaging;
 using System.Xml.Serialization;
+using Microsoft.Win32;
 
 namespace TaskMask
 {
@@ -25,6 +26,7 @@ namespace TaskMask
         internal static Timer TimerWatcher = new Timer();
 
         List<Item> items = new List<Item>();
+
 
         public void activateItem(String itemId)
         {
@@ -70,9 +72,6 @@ namespace TaskMask
         {
             InitializeComponent();
 
-            //DoStartWatcher();
-
-
             // init webbrowser
             wb.AllowWebBrowserDrop = false;
             wb.IsWebBrowserContextMenuEnabled = false;
@@ -82,21 +81,23 @@ namespace TaskMask
 
             string html = Properties.Resources.main_html;
             wb.DocumentText = html;
+
+            //Manager.Log(html);
         }
 
         // load jquery to webbrowser
         private void loadJquery() {
-            
-            wb.Document.InvokeScript("setDebugMode", new object[] { false });
+
+            dynamic state = wb.Document.InvokeScript("setDebugMode", new object[] { false });
 
             string jquery_ui_css = Properties.Resources.jquery_ui_css;
-            wb.Document.InvokeScript("loadStyle", new object[] { jquery_ui_css });
+            state = wb.Document.InvokeScript("loadStyle", new object[] { jquery_ui_css });
 
             string jquery = Properties.Resources.jquery_min;
-            wb.Document.InvokeScript("eval", new object[] { jquery });
+            state = wb.Document.InvokeScript("loadLibraryInline", new object[] { jquery });
 
             string jquery_ui = Properties.Resources.jquery_ui;
-            wb.Document.InvokeScript("eval", new object[] { jquery_ui });
+            state = wb.Document.InvokeScript("loadLibraryInline", new object[] { jquery_ui });
         }
 
         // After browser load

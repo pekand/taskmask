@@ -8,6 +8,8 @@
                 background-color: #CCCCCC;
                 overflow:hidden;
             }
+            
+            
 
             .itemlist table {
                 width:100%;
@@ -28,6 +30,14 @@
                 margin: 0px;
                 padding: 0px;
                 border-collapse: collapse;
+            }
+
+            .itemlist-container {
+                min-width:400px;
+                min-height:50px;
+                
+                border-bottom-color:red;
+                float:left;
             }
 
             .itemlist {
@@ -69,7 +79,12 @@
 
         <script type="text/javascript">
 
-        var debugMode = true;
+        window.onerror = function (err, file, line) {
+            var log = (err + '\nIn file: ' + file + '\nOn line: ' + line);
+            document.write("Javascript error:" + log);
+        };
+
+        var debugMode = false;
 
         function setDebugMode(mode) {
            debugMode = mode;
@@ -81,21 +96,23 @@
             js.src = lib;
             js.onload = after;
             document.body.appendChild(js);
+            return 'ok';
+        }
+
+        function loadLibraryInline(js) {
+            eval(js);
+            return 'ok';
         }
 
         function loadStyle(style) {
             var node = document.createElement('style');
             node.innerHTML = style;
             document.body.appendChild(node);
+            return 'ok';
         }
 
         function initApp()
         {
-            window.onerror = function (err, file, line) {
-                var log = (err + '\nIn file: ' + file + '\nOn line: ' + line);
-                document.write("Javascript error:" + log);
-            };
-
             if (debugMode) {
                 loadStyle('jquery-ui-1.11.4.min.css');
                 loadLibrary('jquery-3.0.0.min.js');
@@ -154,15 +171,15 @@
 
         <script type='text/javascript'>
             function doIt() {
-                //alert($('body').html());
                 return 'done';
             }
         </script>
     </head>
     <body onload='initApp()'>
-        <ul id="itemList1" class="itemlist connectedSortable"></ul>
-        <ul id="itemList2" class="itemlist connectedSortable"></ul>
-        <ul id="itemList3" class="itemlist connectedSortable"></ul>
-        <ul id="itemList4" class="itemlist connectedSortable"></ul>
-    </body>
+        <div class="itemlist-container"><ul id="itemList1" class="itemlist connectedSortable"></ul></div>
+        <div class="itemlist-container"><ul id="itemList2" class="itemlist connectedSortable"></ul></div>
+        <div class="itemlist-container"><ul id="itemList3" class="itemlist connectedSortable"></ul></div>
+        <div class="itemlist-container"><ul id="itemList4" class="itemlist connectedSortable"></ul></div>
+        <div style="clear:both;"></div>
+</body>
 </html>

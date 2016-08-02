@@ -273,5 +273,10 @@ namespace TaskMask
             xmlSerializer.Serialize(textWriter, toSerialize);
             return textWriter.ToString();
         }
+
+        public static void Log(string text)
+        {
+            File.AppendAllText(@"log.txt", text);
+        }
     }
 }
