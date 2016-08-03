@@ -15,12 +15,17 @@
                 width:100%;
             }
 
-            .itemlist .handle-cell {
+            .itemlist .handle {
                 width:32px;
+                height:32px;
+                vertical-align:middle; 
+                text-align:center
             }
+
 
             .itemlist .showitem-cell {
                 width:32px;
+                display:none;
             }
 
             .itemlist .title-cell {
@@ -34,6 +39,7 @@
 
             .itemlist-container {
                 min-width:400px;
+                max-width:400px;
                 min-height:50px;
                 
                 border-bottom-color:red;
@@ -59,9 +65,8 @@
                 background-color:#F6F6F6;
             }
 
-            .itemlist .handle {
-                width:32px;
-                height:32px;
+            .itemlist .last, .itemlist .last:hover {
+                background-color:#ffd800;
             }
 
             .itemlist .showitem {
@@ -130,13 +135,13 @@
             if (typeof (block) === 'undefined') block = 1;
 
             var list =
-                    "<li id='item-" + id + "' class='task ui-state-default' >" +
+                    "<li id='item-" + id + "' data-item='" + id + "' class='task ui-state-default' onmouseover='mouseover(this)' >" +
                     "<table><tr>" +
                     "<td class='handle-cell'><div class='handle'><img width='16' height='16' src='data:image/png;base64," + image + "'></div></td>" +
                     "<td class='showitem-cell'><div class='showitem' >" +
-                    "<input type='checkbox' checked onclick=\"window.external.toggleItem('" + id + "');\">" +
+                    "<input type='checkbox' checked onclick='toggleItem(this)'>" +
                     "</div></td>" +
-                    "<td class='title-cell' onclick=\"window.external.activateItem('" + id + "');\" ><div class='title' >" +
+                    "<td class='title-cell' onclick='activateItem(this);' ><div class='title' >" +
                     title +
                     "</div></td>" +
                     "</tr></table>" +
@@ -167,6 +172,38 @@
                 }
             }).disableSelection();
         }
+
+        function toggleItem(e)
+        {
+            var item = $(e).parent().parent().parent().parent();
+            var id = item.data('item');
+            window.external.toggleItem(id);
+        }
+
+        function activateItem(e)
+        {
+            var item = $(e).parent().parent().parent().parent();
+            var id = item.data('item');
+            $('.task').removeClass('last');
+            item.addClass('last');
+            window.external.activateItem(id);
+        }
+
+        var mo = 0;
+        function mouseover(e)
+        {
+            mo = $(e).data('item');
+        }
+
+        function mousclear(e) {
+            mo = 0;
+        }
+
+        function getActualItem()
+        {
+            return mo;
+        }
+
         </script>
 
         <script type='text/javascript'>

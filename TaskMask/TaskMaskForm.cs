@@ -68,6 +68,9 @@ namespace TaskMask
             }
         }
 
+        KeyboardHook hook = new KeyboardHook();
+
+
         public TaskMaskForm()
         {
             InitializeComponent();
@@ -83,6 +86,19 @@ namespace TaskMask
             wb.DocumentText = html;
 
             //Manager.Log(html);
+
+            // register the event that is fired after the key press.
+            hook.KeyPressed +=
+                new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+            // register the control + alt + F12 combination as hot key.
+            hook.RegisterHotKey(ModifierKeysOption.Control | ModifierKeysOption.Alt,
+                Keys.T);
+        }
+
+        void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            // show the keys pressed in a label.
+            this.WindowState = FormWindowState.Normal;
         }
 
         // load jquery to webbrowser
@@ -247,6 +263,19 @@ namespace TaskMask
             }
 
             return false;
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dynamic item = wb.Document.InvokeScript("getActualItem");
+            Object[] objArray = new Object[1];
+            objArray[0] = (Object)item.ToString();
+            wb.Document.InvokeScript("removeFromList", objArray);
+        }
+
+        private void desktopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Manager.showDesktop();
         }
     }
 }

@@ -257,6 +257,15 @@ namespace TaskMask
             return IsIconic(hWnd);
         }
 
+        //*******// Minimalize windows
+
+        public static void showDesktop()
+        {
+            Type typeShell = Type.GetTypeFromProgID("Shell.Application");
+            object objShell = Activator.CreateInstance(typeShell);
+            typeShell.InvokeMember("MinimizeAll", System.Reflection.BindingFlags.InvokeMethod, null, objShell, null);
+        }
+
         //*******// Serialization
 
         public static T Deserialize<T>(this string toDeserialize)
@@ -278,5 +287,8 @@ namespace TaskMask
         {
             File.AppendAllText(@"log.txt", text);
         }
+
+        
+
     }
 }
